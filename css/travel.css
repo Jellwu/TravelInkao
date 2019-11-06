@@ -1,0 +1,175 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd,ul,li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+	margin-left:10px;
+}
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+.container{
+  width: 1024px;
+  margin: 0px auto;
+}
+
+.banner{
+  background: url(../images/hero.png) top center no-repeat;
+  background-position: cover;
+  height:380px;
+  text-align: center;
+}
+.banner h1{
+  color:white;
+  font-size:34px;
+  line-height: 240px;
+  letter-spacing:6px;
+}
+.form select{
+  width:40%;
+  height:40px;
+  border:1px solid white;
+  background-color: rgba(255,255,255,0.8);
+  padding:5px;
+}
+.form .district option{
+  font-size: 14px;
+  padding:5px;
+  text-align: center;
+}
+.header{
+  position: relative;
+}
+.header .hotdistrict{
+  position: absolute;
+  bottom: -90px;
+  left:14%;
+  width:73%;
+  height: 150px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px gray;
+  z-index:5;
+}
+
+.content .dashline{
+  position:relative;
+  padding:90px;
+  border-bottom: 1px dashed blue;
+}
+.content .dashline img{
+  position: absolute;
+  left:50%;
+  bottom:-6px;
+}
+
+.hotdistrict h2{
+  padding:40px 0px 20px 20px;
+  font-size: 20px;
+}
+.form-btn{
+  margin-left: 60px;
+}
+.hotbtn1,.hotbtn2,.hotbtn3,.hotbtn4{
+  width:100px;
+  height:30px;
+  border-radius: 5px;
+  font-size:16px;
+  margin-right:25px;
+  text-align: center;
+  color:white;
+  box-shadow: 0px 0px 1px gray;
+}
+.hotbtn1{
+  background-color: #A0A603
+}
+.hotbtn2{
+  background-color:#025959;
+}
+.hotbtn3{
+  background-color:#593202;
+}
+.hotbtn4{
+  background-color:#F24C3D;
+}
+
+.content .contenttitle{
+  text-align: center;
+  font-size: 30px;
+  margin-top: 80px;
+  margin-bottom: 50px;
+}
+
+.content .spotList li{
+  list-style: none;
+  width:46%;
+  float:left;
+  margin:10px 18px;
+  border-radius: 4px;
+}
+.spothead{
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  height:200px;
+}
+.spotList .wordtitle{
+  color:white;
+  font-size:26px;
+  margin:150px 0px 0px 20px;
+  float:left;
+}
+.spotList .wordsub{
+  color:white;
+  font-size:22px;
+  margin:154px 10px 0px 0px;
+  float:right;
+}
+.clearfix{
+  clear:both;
+}
+.spotbody p{
+  display: flex;
+  align-items: center;
+  padding:7px 5px;
+}
+.spotbody img{
+  margin-right: 10px;
+
+}
+.spotbody .tag{
+  float:right;
+}
