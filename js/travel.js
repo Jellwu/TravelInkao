@@ -2603,8 +2603,21 @@ var disel = document.querySelector('.district');
 var title = document.querySelector('.contenttitle');
 var spotel = document.querySelector('.spotList');
 var hotbtn = document.querySelector('.form-btn');
+refreshList()
+//網頁開啟後先跑下面的函式:預設顯示三民區的資料
+window.onload = function(){
+  var zoneName = "三民區"
+  title.textContent = zoneName;
+  var str=""
+  for (var i = 0; i < spotdetail.length; i++) {
+    if (spotdetail[i].Zone === zoneName){
+      str += joinstring(i);
+    }
+    spotel.innerHTML = str;
+  }
+}
 
-//字串串接function
+//函式1:字串串接函式
 function joinstring(num){
   var joinstr = '<li><div class="spothead" style="background-image:url('+ spotdetail[num].Picture1 +')"><div class="wordtitle">'
   + spotdetail[num].Name +'</div><div class="wordsub">'+ spotdetail[num].Zone +'</div><div class="clearfix"></div></div><div class="spotbody"><p><img src="images/icons_clock.png" width="25px" alt="" >'
@@ -2613,7 +2626,7 @@ function joinstring(num){
   return joinstr;
 }
 
-//事件觸發函式
+//函式2:change事件觸發時修改頁面(抓字串串接回來的資料寫到spolist中)
 function refreshpage(e){
   var zonename = e.target.value;
   var str=""
@@ -2626,6 +2639,29 @@ function refreshpage(e){
       }
     }
   }
+
+//函式3:將JSON所有的區域寫到陣列，塞到Select。
+function refreshList(){
+//1.抓出陣列所有的行政區域放到areaList(包含重複資料)
+var areaList=[];
+  for (var i = 0; i < spotdetail.length; i++) {
+    areaList.push(spotdetail[i].Zone);
+  }
+//2.跑areaList[]陣列的所有值判斷未寫入(indexOf)的資料寫入area[]陣列
+  area=[];
+  areaList.forEach(function(num){
+    if(area.indexOf(num) == -1){
+      area.push(num);
+    }
+  })
+//3.將資料塞到select中
+  var districList = document.querySelector('.district');
+  var str="";
+  for (var i = 0; i < area.length; i++) {
+    str += '<option value="'+ area[i] +'">'+ area[i] +'</option>'
+    districList.innerHTML = '<option value="" style="display:none">--取欲查詢的行政區域--</option>' + str;
+  }
+}
 
 //觸發事件
 disel.addEventListener('change',refreshpage,false);
