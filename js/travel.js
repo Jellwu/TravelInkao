@@ -1,3 +1,14 @@
+//AJAX動態拿資料
+let xhr = new XMLHttpRequest();
+let spot=[];
+xhr.open('get','https://data.kcg.gov.tw/api/action/datastore_search?resource_id=92290ee5-6e61-456f-80c0-249eae2fcc97&limit=268',true);
+xhr.send(null);
+
+xhr.onload = function(){
+spot = JSON.parse(xhr.responseText);
+let spotDetail = spot.result.records;
+
+/*
 var spotdetail = [{
 Ticketinfo: "免費參觀",
 Zone: "三民區",
@@ -2596,42 +2607,58 @@ Picdescribe1: "內惟埤文化園區",
 Travellinginfo: "",
 _id: 98,
 Id: "C1_397000000A_000164"
-}]
-
+}]*/
 //DOM宣告
-var disel = document.querySelector('.district');
-var title = document.querySelector('.contenttitle');
-var spotel = document.querySelector('.spotList');
-var hotbtn = document.querySelector('.form-btn');
-refreshList()
+let disel = document.querySelector('.district');
+let title = document.querySelector('.contenttitle');
+let spotel = document.querySelector('.spotList');
+let hotbtn = document.querySelector('.form-btn');
+
+
+previewpage();
+refreshList();
 //網頁開啟後先跑下面的函式:預設顯示三民區的資料
-window.onload = function(){
-  var zoneName = "三民區"
+function previewpage(){
+  let zoneName = "三民區"
+  let str=""
   title.textContent = zoneName;
-  var str=""
-  for (var i = 0; i < spotdetail.length; i++) {
-    if (spotdetail[i].Zone === zoneName){
+
+  for (let i = 0; i < spotDetail.length; i++) {
+    if (spotDetail[i].Zone === zoneName){
       str += joinstring(i);
     }
+    //console.log(str);
     spotel.innerHTML = str;
   }
 }
 
 //函式1:字串串接函式
 function joinstring(num){
-  var joinstr = '<li><div class="spothead" style="background-image:url('+ spotdetail[num].Picture1 +')"><div class="wordtitle">'
-  + spotdetail[num].Name +'</div><div class="wordsub">'+ spotdetail[num].Zone +'</div><div class="clearfix"></div></div><div class="spotbody"><p><img src="images/icons_clock.png" width="25px" alt="" >'
-  + spotdetail[num].Opentime +'</p><p><img src="images/icons_pin.png" width="25px" alt="" >'+ spotdetail[num].Add +'</p><p><img src="images/icons_phone.png" width="20px" style="margin-left:3px"alt="">'
-  + spotdetail[num].Tel + '</p><p class="tag"><img src="images/icons_tag.png" alt="">'+ spotdetail[num].Ticketinfo +'</p><div class="clearfix"></div></div></li>'
+  let joinstr =
+  `<li>
+    <div class="spothead" style="background-image:url('${spotDetail[num].Picture1}')">
+      <div class="wordtitle">${spotDetail[num].Name}</div>
+      <div class="wordsub">${spotDetail[num].Zone}</div>
+    <div class="clearfix"></div>
+    </div>
+    <div class="spotbody">
+      <p><img src="images/icons_clock.png" width="25px" alt="" >${spotDetail[num].Opentime}</p>
+      <p><img src="images/icons_pin.png" width="25px" alt="" >${spotDetail[num].Add}</p>
+      <p><img src="images/icons_phone.png" width="20px" style="margin-left:3px"alt="">${spotDetail[num].Tel}</p>
+      <p class="tag"><img src="images/icons_tag.png" alt="">${spotDetail[num].Ticketinfo}</p>
+      <div class="clearfix"></div>
+    </div>
+  </li>`
+
   return joinstr;
 }
 
 //函式2:change事件觸發時修改頁面(抓字串串接回來的資料寫到spolist中)
 function refreshpage(e){
-  var zonename = e.target.value;
-  var str=""
-  for (var i = 0; i < spotdetail.length; i++) {
-      if (zonename === spotdetail[i].Zone){
+  let zonename = e.target.value;
+  let str=""
+  for (let i = 0; i < spotDetail.length; i++) {
+      if (zonename === spotDetail[i].Zone){
         if(e.target.nodeName !== "INPUT" && e.target.nodeName !== "SELECT"){return}
         title.innerHTML = zonename;
         str += joinstring(i);
@@ -2640,29 +2667,32 @@ function refreshpage(e){
     }
   }
 
+
 //函式3:將JSON所有的區域寫到陣列，塞到Select。
 function refreshList(){
 //1.抓出陣列所有的行政區域放到areaList(包含重複資料)
-var areaList=[];
-  for (var i = 0; i < spotdetail.length; i++) {
-    areaList.push(spotdetail[i].Zone);
+let areaList=[];
+  for (let i = 0; i < spotDetail.length; i++) {
+    areaList.push(spotDetail[i].Zone);
   }
 //2.跑areaList[]陣列的所有值判斷未寫入(indexOf)的資料寫入area[]陣列
-  area=[];
+  let area=[];
   areaList.forEach(function(num){
     if(area.indexOf(num) == -1){
       area.push(num);
     }
   })
 //3.將資料塞到select中
-  var districList = document.querySelector('.district');
-  var str="";
-  for (var i = 0; i < area.length; i++) {
+  let districList = document.querySelector('.district');
+  let str="";
+  for (let i = 0; i < area.length; i++) {
     str += '<option value="'+ area[i] +'">'+ area[i] +'</option>'
     districList.innerHTML = '<option value="" style="display:none">--取欲查詢的行政區域--</option>' + str;
   }
 }
 
+
 //觸發事件
-disel.addEventListener('change',refreshpage,false);
-hotbtn.addEventListener('click',refreshpage,false);
+  disel.addEventListener('change',refreshpage,false);
+  hotbtn.addEventListener('click',refreshpage,false);
+}
