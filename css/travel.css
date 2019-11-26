@@ -172,3 +172,15 @@ table {
 .spotbody .tag{
   float:right;
 }
+
+.pagination{
+	display: flex;
+	justify-content: center;
+}
+
+.pagination ul li{
+	text-align: center;
+	width: 15px;
+	display: inline-block;
+	padding:5px;
+}

@@ -1,12 +1,31 @@
+//ES6的動態資料擷取
+const jsonUrl = 'https://data.kcg.gov.tw/api/action/datastore_search?resource_id=92290ee5-6e61-456f-80c0-249eae2fcc97&limit=268';
+let spotDetail = {};
+
+fetch(jsonUrl, {
+    method: 'get'
+  })
+  .then((response) => {
+    return response.json();
+  }).then((data) => {
+    spotDetail = data.result.records;
+    previewpage(spotDetail);
+    refreshList();
+  })
+
 //AJAX動態拿資料
-let xhr = new XMLHttpRequest();
+/*let xhr = new XMLHttpRequest();
 let spot=[];
 xhr.open('get','https://data.kcg.gov.tw/api/action/datastore_search?resource_id=92290ee5-6e61-456f-80c0-249eae2fcc97&limit=268',true);
 xhr.send(null);
 
+//啟用記得將}移到最下方(在onload之後執行全部內容)
 xhr.onload = function(){
 spot = JSON.parse(xhr.responseText);
 let spotDetail = spot.result.records;
+}
+
+*/
 
 /*
 var spotdetail = [{
@@ -2608,6 +2627,7 @@ Travellinginfo: "",
 _id: 98,
 Id: "C1_397000000A_000164"
 }]*/
+
 //DOM宣告
 let disel = document.querySelector('.district');
 let title = document.querySelector('.contenttitle');
@@ -2615,16 +2635,14 @@ let spotel = document.querySelector('.spotList');
 let hotbtn = document.querySelector('.form-btn');
 
 
-previewpage();
-refreshList();
-//網頁開啟後先跑下面的函式:預設顯示三民區的資料
-function previewpage(){
-  let zoneName = "三民區"
-  let str=""
+//1.網頁開啟後先跑下面的函式:預設顯示鼓山區的資料
+function previewpage(Detail) {
+  let zoneName = "鼓山區"
+  let str = ""
   title.textContent = zoneName;
 
   for (let i = 0; i < spotDetail.length; i++) {
-    if (spotDetail[i].Zone === zoneName){
+    if (Detail[i].Zone === zoneName) {
       str += joinstring(i);
     }
     //console.log(str);
@@ -2632,67 +2650,74 @@ function previewpage(){
   }
 }
 
-//函式1:字串串接函式
-function joinstring(num){
+//2.字串串接函式
+function joinstring(num) {
+  let Picture1 = spotDetail[num].Picture1;
+  let Name = spotDetail[num].Name;
+  let Zone = spotDetail[num].Zone;
+  let Opentime = spotDetail[num].Opentime;
+  let Add = spotDetail[num].Add;
+  let Tel = spotDetail[num].Tel;
+  let Ticketinfo = spotDetail[num].Ticketinfo;
   let joinstr =
-  `<li>
-    <div class="spothead" style="background-image:url('${spotDetail[num].Picture1}')">
-      <div class="wordtitle">${spotDetail[num].Name}</div>
-      <div class="wordsub">${spotDetail[num].Zone}</div>
+    `<li>
+    <div class="spothead" style="background-image:url('${Picture1}')">
+      <div class="wordtitle">${Name}</div>
+      <div class="wordsub">${Zone}</div>
     <div class="clearfix"></div>
     </div>
     <div class="spotbody">
-      <p><img src="images/icons_clock.png" width="25px" alt="" >${spotDetail[num].Opentime}</p>
-      <p><img src="images/icons_pin.png" width="25px" alt="" >${spotDetail[num].Add}</p>
-      <p><img src="images/icons_phone.png" width="20px" style="margin-left:3px"alt="">${spotDetail[num].Tel}</p>
-      <p class="tag"><img src="images/icons_tag.png" alt="">${spotDetail[num].Ticketinfo}</p>
-      <div class="clearfix"></div>
+      <p><img src="images/icons_clock.png" width="25px" alt="" >${Opentime}</p>
+      <p><img src="images/icons_pin.png" width="25px" alt="" >${Add}</p>
+      <p><img src="images/icons_phone.png" width="20px" style="margin-left:3px"alt="">${Tel}</p>
+      <p class="tag"><img src="images/icons_tag.png" alt="">${Ticketinfo}</p>
     </div>
   </li>`
 
   return joinstr;
 }
 
-//函式2:change事件觸發時修改頁面(抓字串串接回來的資料寫到spolist中)
-function refreshpage(e){
+//3.change事件觸發時修改頁面(抓字串串接回來的資料寫到spolist中)
+function refreshpage(e) {
   let zonename = e.target.value;
-  let str=""
+  let str = ""
+  if (e.target.nodeName !== "INPUT" && e.target.nodeName !== "SELECT") {
+    return
+  }
   for (let i = 0; i < spotDetail.length; i++) {
-      if (zonename === spotDetail[i].Zone){
-        if(e.target.nodeName !== "INPUT" && e.target.nodeName !== "SELECT"){return}
-        title.innerHTML = zonename;
-        str += joinstring(i);
-        spotel.innerHTML = str;
-      }
+    if (zonename === spotDetail[i].Zone) {
+      title.innerHTML = zonename;
+      str += joinstring(i);
+      spotel.innerHTML = str;
     }
   }
+}
 
 
-//函式3:將JSON所有的區域寫到陣列，塞到Select。
-function refreshList(){
-//1.抓出陣列所有的行政區域放到areaList(包含重複資料)
-let areaList=[];
+//4.將JSON所有的區域寫到陣列，塞到Select。
+function refreshList() {
+  //1.抓出陣列所有的行政區域放到areaList(包含重複資料)
+  let areaList = [];
   for (let i = 0; i < spotDetail.length; i++) {
     areaList.push(spotDetail[i].Zone);
   }
-//2.跑areaList[]陣列的所有值判斷未寫入(indexOf)的資料寫入area[]陣列
-  let area=[];
-  areaList.forEach(function(num){
-    if(area.indexOf(num) == -1){
+  //2.跑areaList[]陣列的所有值判斷未寫入(indexOf)的資料寫入area[]陣列
+  let area = [];
+  areaList.forEach(function(num) {
+    if (area.indexOf(num) == -1) {
       area.push(num);
     }
   })
-//3.將資料塞到select中
+  //3.將資料塞到select中
   let districList = document.querySelector('.district');
-  let str="";
+  let str = "";
   for (let i = 0; i < area.length; i++) {
-    str += '<option value="'+ area[i] +'">'+ area[i] +'</option>'
+    str += '<option value="' + area[i] + '">' + area[i] + '</option>'
     districList.innerHTML = '<option value="" style="display:none">--取欲查詢的行政區域--</option>' + str;
   }
 }
 
 
 //觸發事件
-  disel.addEventListener('change',refreshpage,false);
-  hotbtn.addEventListener('click',refreshpage,false);
-}
+disel.addEventListener('change', refreshpage, false);
+hotbtn.addEventListener('click', refreshpage, false);
